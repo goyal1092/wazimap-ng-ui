@@ -86,7 +86,8 @@ export class FilterLabel extends Component {
             padding: "3px 10px 3px 10px"
           }
         },
-        rootcomponentclass: "snackbar-position"
+        rootcomponentclass: ["snackbar-position", "snackbar-cursor-pointer"],
+        closeOnClick: true,
       }
       let el = document.getElementById("mapchip-snackbar");
       toast.default(<SnackbarContent />, config, el);

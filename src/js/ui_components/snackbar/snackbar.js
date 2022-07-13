@@ -9,9 +9,16 @@ const mountPoint = document.createElement('div');
 const root = createRoot(mountPoint);
 
 const ShowSnackbar = ({ message, config }) => {
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
   useEffect(() => {
-      enqueueSnackbar(message, config);
+      const {closeOnClick, ...updatedConfig} = config;
+      const key = enqueueSnackbar(message, {
+          ...updatedConfig,
+          onClick: () => {
+            closeOnClick ? closeSnackbar(key) : "";
+          }
+      });
     },
     [message, config]
   );
@@ -20,6 +27,7 @@ const ShowSnackbar = ({ message, config }) => {
 
 const RenderSnackbar = (props) => {
   const {maxSnack, config, msg} = props;
+
   return (
     <SnackbarProvider
       maxSnack={maxSnack || 3}
