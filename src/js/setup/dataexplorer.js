@@ -4,11 +4,13 @@ export function configureDataExplorerEvents(controller, dataMapperMenu) {
     controller.bubbleEvents(dataMapperMenu, ['data_mapper_menu.nodata', 'data_mapper_menu.subcategory.expanded'])
     controller.on('versions.indicators.ready', (versionData) => {
         let data = versionData.payload;
+        let showRichDataPanelLink = versionData.state.profile.profile.indicatorCount !== 0;
+        // let showLinkToRichDataView = 
         if (JSON.stringify(data) === JSON.stringify({})) {
             //no children -- show no-data chip
-            dataMapperMenu.showNoData();
+            dataMapperMenu.showNoData(showRichDataPanelLink);
         } else {
-            loadMenu(dataMapperMenu, data)
+            loadMenu(dataMapperMenu, data, showRichDataPanelLink)
         }
     })
 

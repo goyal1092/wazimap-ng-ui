@@ -7,20 +7,30 @@ import {SubCategory} from "./subcategory";
 import {Indicator} from "./indicator";
 import {SubIndicator} from './subindicator'
 
+import {RichDataPanelLink} from "./components/RichDataPanelLink";
+
 let parentContainer = null;
 let categoryTemplate = null;
 let subCategoryTemplate = null;
 let indicatorTemplate = null;
 let indicatorItemTemplate = null;
+let richDataPanelLinkTemplate = null;
 const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';
+const richDataPanelLinkClsName = 'data-mapper-content__rich-data-panel-link';
 
-export function loadMenu(dataMapperMenu, data) {
+export function loadMenu(dataMapperMenu, data, showRichDataPanelLink) {
     parentContainer = $(".data-mapper-content__list");
     categoryTemplate = $(".styles .data-category--v2")[0].cloneNode(true);
     subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
     indicatorTemplate = $(".data-category__h2_content--v2", subCategoryTemplate)[0].cloneNode(true);
     indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
+
+    let contaiber = document.createElement('div');
+    contaiber.setAttribute("class", richDataPanelLinkClsName);
+    $(contaiber).insertBefore(`noDataWrapperClsName`);
+    let RichDataPanelLinkc = new RichDataPanelLink(this, contaiber);
+    RichDataPanelLinkc.render({showRichDataPanelLink})
 
     function addIndicators(parent, indicators) {
         if (indicators === undefined) {
@@ -116,7 +126,7 @@ export class DataMapperMenu extends Component {
         $(`.${noDataWrapperClsName}`).addClass('hidden');
     }
 
-    showNoData() {
+    showNoData(showRichDataPanelLink) {
         $(parentContainer).empty();
         $('.' + loadingClsName).addClass('hidden');
         $('.' + noDataWrapperClsName).removeClass('hidden');

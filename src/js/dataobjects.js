@@ -1,6 +1,7 @@
 import {defaultValues} from './defaultValues';
 import {ContentBlock} from './profile/blocks/content_block';
 import {fillMissingKeys} from './utils';
+import {isEmpty} from 'lodash';
 
 export class Geography {
     constructor(js) {
@@ -68,16 +69,22 @@ export class Profile {
         this._parents = js.geography.parents.map(el => new Geography(el));
         this._highlights = js.highlights;
         this._profileData = js.profile_data;
+        let indicatorCount = 0;
 
         Object.values(this._profileData).forEach(category => {
             category = Profile.fixCategory(category)
             Object.values(category.subcategories).forEach(subcategory => {
                 subcategory = Profile.fixSubcategory(subcategory)
                 for (const [title, indicator] of Object.entries(subcategory.indicators)) {
-                    indicator = IndicatorHelper.fixIndicator(title, indicator)
+                    indicator = IndicatorHelper.fixIndicator(title, indicator);
+                    if (!isEmpty(indicator)){
+                        indicatorCount = indicatorCount + 1;
+                    }
                 }
             })
         })
+
+        this._indicatorCount = indicatorCount;
     }
 
 
